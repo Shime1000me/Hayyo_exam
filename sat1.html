@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>SAT Exam - Round 1 | Online ESSLCE-equivalent Practice Portal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: #f0f2f5;
+            color: #1d2125;
+            line-height: 1.5;
+            font-size: 0.9375rem;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 1rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+            z-index: 1030;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .navbar-brand {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #0f6cbf;
+            text-decoration: none;
+        }
+
+        .navbar-brand span {
+            font-size: 0.7rem;
+            font-weight: normal;
+            color: #6a737b;
+        }
+
+        .navbar-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logout-btn {
+            background: none;
+            border: 1px solid #dee2e6;
+            padding: 0.4rem 0.8rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            color: #6a737b;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+
+        .logout-btn:hover {
+            background: #ca3120;
+            color: white;
+            border-color: #ca3120;
+        }
+
+        .breadcrumb-container {
+            background: white;
+            padding: 0.75rem 1.5rem;
+            border-bottom: 1px solid #dee2e6;
+            margin-top: 60px;
+        }
+
+        .breadcrumb {
+            max-width: 1400px;
+            margin: 0 auto;
+            font-size: 0.8rem;
+        }
+
+        .breadcrumb a {
+            color: #0f6cbf;
+            text-decoration: none;
+        }
+
+        .page-header {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem 0 1.5rem;
+        }
+
+        .page-header h1 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #1d2125;
+        }
+
+        .main-wrapper {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1.5rem;
+            flex: 1;
+        }
+
+        .coming-soon-card {
+            background: white;
+            border-radius: 1rem;
+            padding: 3rem 2rem;
+            text-align: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            border: 1px solid #dee2e6;
+        }
+
+        .coming-soon-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .coming-soon-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #0f6cbf;
+            margin-bottom: 0.5rem;
+        }
+
+        .coming-soon-subtitle {
+            font-size: 1rem;
+            color: #6a737b;
+            margin-bottom: 1.5rem;
+        }
+
+        .coming-soon-message {
+            font-size: 0.95rem;
+            color: #1d2125;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .back-btn {
+            display: inline-block;
+            background: #0f6cbf;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+
+        .back-btn:hover {
+            background: #094478;
+        }
+
+        .back-btn.secondary {
+            background: #6c757d;
+            margin-left: 1rem;
+        }
+
+        .back-btn.secondary:hover {
+            background: #5a6268;
+        }
+
+        footer {
+            text-align: center;
+            padding: 1.5rem;
+            color: #6a737b;
+            font-size: 0.75rem;
+            border-top: 1px solid #dee2e6;
+            margin-top: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .coming-soon-title {
+                font-size: 1.4rem;
+            }
+            .coming-soon-card {
+                padding: 2rem 1rem;
+            }
+            .back-btn, .back-btn.secondary {
+                display: block;
+                width: 100%;
+                margin: 0.5rem 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <a href="#" class="navbar-brand">🏫 Online ESSLCE-equivalent<br><span>Exam Practice Portal</span></a>
+    <div class="navbar-right">
+        <button class="logout-btn" id="logoutBtn">🚪 Logout</button>
+    </div>
+</nav>
+
+<div class="breadcrumb-container">
+    <div class="breadcrumb">
+        <a href="rounds.html">Home</a> / <a href="exams1.html">Round 1</a> / <span>SAT</span>
+    </div>
+</div>
+
+<div class="page-header">
+    <h1>SAT</h1>
+</div>
+
+<div class="main-wrapper">
+    <div class="coming-soon-card">
+        <div class="coming-soon-icon">📝✨</div>
+        <div class="coming-soon-title">Coming Soon!</div>
+        <div class="coming-soon-subtitle">SAT Practice Exam</div>
+        <div class="coming-soon-message">
+            <p>We are currently preparing the SAT practice exam for Round 1.</p>
+            <p style="margin-top: 0.5rem;">This exam will include:</p>
+            <ul style="text-align: left; max-width: 300px; margin: 1rem auto; padding-left: 1.5rem;">
+                <li>Reading Comprehension</li>
+                <li>Writing and Language</li>
+                <li>Math (No Calculator)</li>
+                <li>Math (Calculator allowed)</li>
+            </ul>
+            <p style="margin-top: 1rem; color: #0f6cbf; font-weight: 500;">Please check back soon!</p>
+        </div>
+        <div>
+            <button class="back-btn" onclick="goBack()">← Back to Subjects</button>
+            <button class="back-btn secondary" onclick="goToRounds()">🏠 Back to Rounds</button>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <p>© 2026 Online ESSLCE-equivalent Exam Practice Portal | SAT - Round 1 (Coming Soon)</p>
+</footer>
+
+<script>
+    // ============================================
+    // SAT EXAM - COMING SOON PAGE
+    // ============================================
+
+    const logoutBtn = document.getElementById('logoutBtn');
+
+    function logout() {
+        localStorage.clear();
+        window.location.href = 'index.html';
+    }
+
+    function goBack() {
+        window.location.href = 'exams1.html';
+    }
+
+    function goToRounds() {
+        window.location.href = 'rounds.html';
+    }
+
+    logoutBtn.onclick = logout;
+
+    function checkLogin() {
+        const loggedIn = localStorage.getItem('hayyo_logged_in');
+        if (!loggedIn || loggedIn !== 'true') {
+            window.location.href = 'index.html';
+        }
+    }
+
+    checkLogin();
+</script>
+
+</body>
+</html>

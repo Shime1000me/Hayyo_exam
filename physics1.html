@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Physics Exam - Round 1 | Online ESSLCE-equivalent Practice Portal</title>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" id="MathJax-script" async></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: #f0f2f5;
+            color: #1d2125;
+            line-height: 1.5;
+            font-size: 0.9375rem;
+            overflow-x: hidden;
+        }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 1rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+            z-index: 1030;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .navbar-brand {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #0f6cbf;
+            text-decoration: none;
+        }
+
+        .navbar-brand span {
+            font-size: 0.7rem;
+            font-weight: normal;
+            color: #6a737b;
+        }
+
+        .navbar-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .quiz-timer {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 2rem;
+            padding: 0.4rem 1rem;
+            font-family: monospace;
+            font-weight: bold;
+            font-size: 1rem;
+        }
+
+        .quiz-timer.warning {
+            background: #ca3120;
+            color: white;
+            border-color: #a01a0c;
+        }
+
+        .drawer-toggle {
+            background: #0f6cbf;
+            border: none;
+            color: white;
+            padding: 0.4rem 0.8rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .drawer-toggle:hover {
+            background: #094478;
+        }
+
+        .logout-btn {
+            background: none;
+            border: 1px solid #dee2e6;
+            padding: 0.4rem 0.8rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            color: #6a737b;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+
+        .logout-btn:hover {
+            background: #ca3120;
+            color: white;
+            border-color: #ca3120;
+        }
+
+        .drawer-right {
+            position: fixed;
+            top: 60px;
+            right: -320px;
+            width: 320px;
+            height: calc(100% - 60px);
+            background: white;
+            box-shadow: -2px 0 8px rgba(0,0,0,0.1);
+            z-index: 1020;
+            transition: right 0.3s ease;
+            overflow-y: auto;
+            padding: 1rem;
+            border-left: 1px solid #dee2e6;
+        }
+
+        .drawer-right.open {
+            right: 0;
+        }
+
+        .drawer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 1rem;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .drawer-header h3 {
+            font-size: 1rem;
+            margin: 0;
+        }
+
+        .drawer-close {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+        }
+
+        .drawer-overlay {
+            position: fixed;
+            top: 60px;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.3);
+            z-index: 1015;
+            display: none;
+        }
+
+        .drawer-overlay.show {
+            display: block;
+        }
+
+        .qn-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .qnbutton {
+            display: inline-block;
+            width: 2.5rem;
+            height: 2.5rem;
+            line-height: 2.5rem;
+            text-align: center;
+            background: #fff;
+            border: 1px solid #bbb;
+            border-radius: 0.25rem;
+            text-decoration: none;
+            color: #1d2125;
+            font-weight: bold;
+            font-size: 0.9rem;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .qnbutton.thispage {
+            border: 2px solid #0f6cbf;
+            font-weight: bold;
+        }
+
+        .qnbutton.answered {
+            background: #d4edda;
+            border-color: #28a745;
+            color: #155724;
+        }
+
+        .qnbutton.flagged::after {
+            content: "⚑";
+            position: absolute;
+            top: -5px;
+            right: -3px;
+            background: #ca3120;
+            color: white;
+            font-size: 10px;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .othernav {
+            margin-top: 1rem;
+            padding-top: 0.5rem;
+            border-top: 1px solid #dee2e6;
+        }
+
+        .endtestlink {
+            display: block;
+            text-align: center;
+            background: #28a745;
+            color: white;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            text-decoration: none;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .endtestlink:hover {
+            background: #1e7e34;
+        }
+
+        .breadcrumb-container {
+            background: white;
+            padding: 0.75rem 1.5rem;
+            border-bottom: 1px solid #dee2e6;
+            margin-top: 60px;
+        }
+
+        .breadcrumb {
+            max-width: 1400px;
+            margin: 0 auto;
+            font-size: 0.8rem;
+        }
+
+        .breadcrumb a {
+            color: #0f6cbf;
+            text-decoration: none;
+        }
+
+        .page-header {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1rem 1.5rem 0 1.5rem;
+        }
+
+        .page-header h1 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #1d2125;
+        }
+
+        .main-wrapper {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1.5rem;
+        }
+
+        .main-content {
+            background: white;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .que {
+            margin-bottom: 2rem;
+            clear: left;
+            border-bottom: 1px solid #dee2e6;
+            padding-bottom: 1rem;
+            background: #f8f9fa;
+            border-radius: 0.5rem;
+            padding: 1.25rem;
+            border: 1px solid #dee2e6;
+        }
+
+        .info {
+            float: left;
+            width: 7rem;
+            padding: 0.5rem;
+            background: #e9ecef;
+            border: 1px solid #dee2e6;
+            border-radius: 0.25rem;
+            margin-right: 1rem;
+        }
+
+        .qno {
+            font-size: 1.3rem;
+            font-weight: bold;
+        }
+
+        .state {
+            font-size: 0.7rem;
+            color: #6a737b;
+        }
+
+        .questionflag {
+            margin-top: 0.5rem;
+        }
+
+        .flag-action {
+            background: none;
+            border: none;
+            color: #adb5bd;
+            cursor: pointer;
+            font-size: 0.75rem;
+        }
+
+        .flag-action.active {
+            color: #ca3120;
+        }
+
+        .content {
+            margin-left: 8rem;
+        }
+
+        .qtext {
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+
+        .ablock {
+            margin: 0.7rem 0;
+        }
+
+        .answer {
+            margin-bottom: 0.5rem;
+        }
+
+        .r0, .r1 {
+            padding: 0.3rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .r0 input, .r1 input {
+            margin: 0;
+        }
+
+        .answernumber {
+            font-weight: normal;
+            min-width: 1.5rem;
+        }
+
+        .qtype_multichoice_clearchoice {
+            text-align: right;
+            margin-top: 0.5rem;
+        }
+
+        .qtype_multichoice_clearchoice a {
+            color: #0f6cbf;
+            font-size: 0.75rem;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .submitbtns {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+        }
+
+        .mod_quiz-next-nav, .mod_quiz-prev-nav {
+            background: #0f6cbf;
+            color: white;
+            border: none;
+            padding: 0.5rem 1.5rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .summary-item {
+            padding: 0.5rem;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .modal-btn-primary, .modal-btn-secondary {
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            flex: 1;
+            border: none;
+        }
+
+        .modal-btn-primary {
+            background: #28a745;
+            color: white;
+        }
+
+        .modal-btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        footer {
+            text-align: center;
+            padding: 1.5rem;
+            color: #6a737b;
+            font-size: 0.75rem;
+            border-top: 1px solid #dee2e6;
+            margin-top: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .info {
+                float: none;
+                width: auto;
+                margin-bottom: 1rem;
+            }
+            .content {
+                margin-left: 0;
+            }
+            .drawer-right {
+                width: 280px;
+            }
+            .navbar-brand {
+                font-size: 0.8rem;
+            }
+            .quiz-timer {
+                font-size: 0.8rem;
+                padding: 0.3rem 0.6rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <a href="#" class="navbar-brand">🏫 Online ESSLCE-equivalent<br><span>Exam Practice Portal</span></a>
+    <div class="navbar-right">
+        <div class="quiz-timer" id="quizTimer">Time left <span id="quiz-time-left">01:30:00</span></div>
+        <button class="drawer-toggle" id="openDrawerBtn">📋 Navigation</button>
+        <button class="logout-btn" id="logoutBtn">🚪 Logout</button>
+    </div>
+</nav>
+
+<div class="drawer-right" id="quizDrawer">
+    <div class="drawer-header">
+        <h3>Quiz navigation</h3>
+        <button class="drawer-close" id="closeDrawerBtn">✕</button>
+    </div>
+    <div class="qn-buttons" id="qnButtons"></div>
+    <div class="othernav">
+        <a class="endtestlink" id="finishAttemptLink">Finish attempt ...</a>
+    </div>
+</div>
+<div class="drawer-overlay" id="drawerOverlay"></div>
+
+<div class="breadcrumb-container">
+    <div class="breadcrumb">
+        <a href="rounds.html">Home</a> / <a href="exams1.html">Round 1</a> / <span>Physics</span>
+    </div>
+</div>
+
+<div class="page-header">
+    <h1>Physics</h1>
+</div>
+
+<div class="main-wrapper">
+    <div class="main-content">
+        <div id="questionsContainer"></div>
+        <div class="submitbtns" id="pageNavButtons">
+            <button class="mod_quiz-next-nav" id="nextPageBtn">Next page</button>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <p>© 2026 Online ESSLCE-equivalent Exam Practice Portal | Physics - Round 1</p>
+</footer>
+
+<div id="summaryModal" class="modal">
+    <div class="modal-content">
+        <h2>📋 Quiz Summary</h2>
+        <div id="summaryList"></div>
+        <div class="modal-buttons">
+            <button class="modal-btn-secondary" id="cancelSummaryBtn">Go back</button>
+            <button class="modal-btn-primary" id="submitFinalBtn">Submit all and finish</button>
+        </div>
+    </div>
+</div>
+
+<div id="scoreModal" class="modal">
+    <div class="modal-content">
+        <h2>📊 Exam Results</h2>
+        <div id="scoreDetails"></div>
+        <button class="modal-btn-primary" id="closeScoreBtn">Close</button>
+    </div>
+</div>
+
+<script>
+    // ============================================
+    // PHYSICS EXAM - 30 QUESTIONS (Round 1)
+    // Based on extracted content from original HU exam
+    // FIXED: Navigation now jumps to correct page
+    // ============================================
+
+    const questions = [
+        // Page 1 - Questions 1-15
+        { text: "A ball is thrown vertically upwards from the top of a cliff with an initial velocity v. Another ball is dropped vertically downwards from the same height with the same initial speed v at the same instant. Neglecting air resistance, which ball hits the ground with a higher speed?", options: ["The ball thrown upwards hits with a higher speed because it travels a greater total distance.", "The ball dropped downwards hits with a higher speed because it starts moving towards the ground immediately.", "Both balls strike the ground with the exact same speed.", "It depends on the precise mass of the two balls."], correct: 2 },
+        { text: "A bimetallic strip consists of brass and iron bonded together. The coefficient of linear expansion of brass is greater than that of iron (αbrass > αiron). If the strip is cooled significantly below room temperature, how will it bend?", options: ["It remains completely straight because cooling affects both metals equally.", "It bends into an arc with brass on the outside (convex side).", "It bends into an arc with iron on the outside (convex side).", "It twists into a tight helical coil."], correct: 1 },
+        { text: "A block is placed on a rough horizontal surface. A horizontal force F is applied to the block, and its magnitude is gradually increased from zero. If the coefficient of static friction is μs and kinetic friction is μk, which of the following statements is true regarding the friction force f?", options: ["The friction force f is equal to μk Mg from the moment F > 0.", "The friction force f matches F exactly until F exceeds μs Mg, at which point it abruptly drops to a constant value of μk Mg.", "The friction force increases exponentially until sliding occurs, then remains zero.", "The static friction force can never exceed the applied force F once the block is moving."], correct: 1 },
+        { text: "A car travels the first half of the total distance between two points at a constant speed v1 and the second half of the total distance at a constant speed v2. What is the average speed of the car over the entire journey?", options: ["(v1 + v2)/2", "√(v1·v2)", "(2v1·v2)/(v1 + v2)", "(v1·v2)·(v1 + v2)"], correct: 2 },
+        { text: "A cylindrical copper wire has a resistance R. If it is uniformly stretched until its length becomes double its original value while its mass and density remain constant, what is its new resistance?", options: ["2R", "4R", "½R", "R"], correct: 1 },
+        { text: "A heavy block of mass M is supported by a light string fastened to a ceiling. A similar string hangs from the bottom of the block. A sharp, sudden jerk is given to the lower string. Which string breaks first, and why?", options: ["The upper string breaks because the tension due to the weight of the block is always added to the jerking force.", "The lower string breaks because the mass of the block possesses inertia, resisting sudden changes in motion and preventing the force from reaching the upper string instantaneously.", "Both strings break simultaneously because the tension propagates infinitely fast throughout the system.", "Neither string breaks; the force is distributed evenly, causing the block to rotate instead."], correct: 1 },
+        { text: "A parallel-plate air capacitor is charged by a battery and then disconnected from it. If the distance between the two plates is now doubled using insulating handles, what happens to the energy stored in the capacitor?", options: ["Stored energy is halved because capacitance doubles.", "Stored energy doubles because capacitance is halved while the charge remains constant.", "Stored energy remains exactly the same because the battery was disconnected.", "Stored energy falls to zero because the electric field lines disappear."], correct: 1 },
+        { text: "A projectile is launched from level ground at an angle θ above the horizontal. At the highest point of its trajectory, what are the directions of its velocity vector and acceleration vector relative to each other?", options: ["They are parallel to each other.", "They are anti-parallel to each other.", "They are mutually perpendicular to each other.", "The acceleration vector becomes zero, so no relative direction exists."], correct: 2 },
+        { text: "A radioactive sample has a half-life of 10 days. If a laboratory starts with a pure sample of this isotope, what fraction of the original radioactive nuclei will remain undecayed after 30 days have elapsed?", options: ["1/3", "1/6", "1/8", "1/9"], correct: 2 },
+        { text: "A ray of light travels from a dense medium with a high refractive index n1 towards a less dense medium with a lower refractive index n2. If the angle of incidence matches the critical angle θc, what is the angle of refraction inside the second medium?", options: ["0°", "45°", "90°", "It undergoes total internal reflection, so no refraction occurs."], correct: 2 },
+        { text: "A real battery with an internal resistance r and electromotive force (emf) ε is connected across a variable external resistor R. For what value of R is the power delivered to the external load maximized?", options: ["R = 0", "R = ∞", "R = r", "R = r/2"], correct: 2 },
+        { text: "A rocket accelerates vertically upwards. As the rocket ascends and burns its fuel at a constant rate with a constant exhaust velocity relative to the rocket, what happens to its acceleration?", options: ["Its acceleration remains constant because the thrust force is constant.", "Its acceleration decreases because the air resistance increases with altitude.", "Its acceleration increases because the total mass of the rocket decreases continuously while the thrust remains constant.", "Its acceleration drops to zero as soon as it exits the dense layers of the atmosphere."], correct: 2 },
+        { text: "A small spherical steel ball is dropped into a long column of a highly viscous liquid. Which graph best describes the variation of its acceleration a as a function of time t until it reaches terminal velocity?", options: ["Acceleration remains constant throughout the descent.", "Acceleration decreases exponentially over time until it becomes zero.", "Acceleration increases linearly as the velocity increases.", "Acceleration immediately drops to zero the instant the ball enters the fluid."], correct: 1 },
+        { text: "A steady direct current I flows through a long, straight wire. A rectangular conducting loop lies in the same plane as the wire. If the loop is pushed away from the wire at a constant speed, what is the direction of the induced current in the loop?", options: ["No current is induced because the loop moves at a constant speed.", "Clockwise, to oppose the decrease in the magnetic flux pointing into the page.", "Counter-clockwise, to enhance the magnetic flux pointing out of the page.", "The current alternates directions periodically."], correct: 1 },
+        { text: "An electron enters a region of uniform magnetic field B pointing out of the page. The initial velocity vector of the electron points horizontally to the right. What is the path followed by the electron?", options: ["A straight line continuing horizontally to the right.", "A parabolic path curving downwards.", "A circular path curving upwards (clockwise direction).", "A circular path curving downwards (counter-clockwise direction)."], correct: 3 },
+        
+        // Page 2 - Questions 16-30
+        { text: "An ice cube floats in a glass filled to the brim with water. As the ice cube melts completely without any temperature change in the surrounding environment, what happens to the water level in the glass?", options: ["The water overflows because the volume of ice decreases.", "The water level goes down because water contracts when it melts.", "The water level remains exactly at the brim without overflowing.", "The water level fluctuates up and down unpredictably due to surface tension changes."], correct: 2 },
+        { text: "An object moves along a straight line such that its velocity as a function of time t is given by v(t) = αt - βt², where α and β are positive constants. At what time t > 0 does the object reach its maximum displacement from its starting position?", options: ["t = α/β", "t = α/2β", "t = 2α/β", "t = √(α/β)"], correct: 1 },
+        { text: "Consider an object moving in a circle at a constant speed. If the radius of the circular path is halved while the centripetal force acting on the object is kept constant, what happens to the kinetic energy of the object?", options: ["The kinetic energy is doubled.", "The kinetic energy is halved.", "The kinetic energy remains unchanged.", "The kinetic energy becomes four times its original value."], correct: 1 },
+        { text: "Equal masses of two different liquids, Liquid A and Liquid B, are heated using identical heat sources that deliver energy at the same constant rate. If the temperature of Liquid A rises twice as fast as the temperature of Liquid B, what can be concluded about their specific heat capacities (Cₐ and Cᵦ)?", options: ["Cₐ = 2Cᵦ", "Cₐ = Cᵦ", "Cₐ = ½Cᵦ", "Cₐ = 4Cᵦ"], correct: 2 },
+        { text: "Given two non-zero vectors A and B, if the magnitude of their vector cross product satisfies |A × B| = A·B, what is the angle θ between the two vectors?", options: ["0°", "45°", "90°", "180°"], correct: 1 },
+        { text: "How do soft-bodied animals without rigid skeletal frameworks, such as earthworms or sea anemones, utilize principles of fluid mechanics to produce structured body motion?", options: ["They use Bernoulli's principle to generate localized aerodynamic lift across their skin.", "They leverage Pascal's principle within a hydrostatic skeleton, transmitting fluid pressure uniformly through closed body cavities to alter shape and move.", "They depend on the surface tension of water to slide across dry land.", "They alter their internal fluid density to constantly change their buoyancy relative to air."], correct: 1 },
+        { text: "If three vectors A, B, and C satisfy the equation A + B = C and their magnitudes satisfy A² + B² = C², which statement correctly describes the geometric relationship between A and B?", options: ["A and B are parallel to each other.", "A and B are anti-parallel to each other.", "A and B are perpendicular to each other.", "The vectors must all be zero vectors."], correct: 2 },
+        { text: "In an ideal p-n junction diode, what happens to the width of the depletion layer and the potential barrier when a reverse bias voltage is applied?", options: ["The depletion layer widens, and the potential barrier increases, preventing major charge carriers from crossing.", "The depletion layer narrows, and the potential barrier decreases, facilitating conduction.", "The depletion layer disappears completely, turning the diode into a perfect conductor.", "The width remains unchanged, but the potential barrier drops to zero."], correct: 0 },
+        { text: "Two particles, A and B, are projected simultaneously from the same point on level ground. Particle A is launched at an angle of 30° to the horizontal, and particle B is launched at 60° to the horizontal. If both particles have the same horizontal range, what is the ratio of the time of flight of particle B to that of particle A?", options: ["1 : 1", "√3 : 1", "1 : √3", "3 : 1"], correct: 1 },
+        { text: "Two point charges, +q and -4q, are placed a distance L apart along a straight line. At what point along the line connecting them is the net electric field due to these two charges equal to zero?", options: ["At a point between the two charges, closer to +q.", "At a point to the left of +q (outside the segment joining them).", "At a point to the right of -4q (outside the segment joining them).", "The electric field cannot be zero anywhere along the line except at infinity."], correct: 1 },
+        { text: "Two wires, X and Y, are made of the same metallic material. Wire X has twice the length and twice the diameter of wire Y. If both wires are subjected to the same tensile hanging load, what is the ratio of the elongation of wire X to that of wire Y?", options: ["1 : 1", "1 : 2", "2 : 1", "1 : 4"], correct: 1 },
+        { text: "Water flows through a horizontal pipe of varying cross-sectional area. At a point where the pipe narrows, what happens to the fluid speed and the fluid pressure according to the Continuity Equation and Bernoulli's Principle?", options: ["Fluid speed increases, and fluid pressure increases.", "Fluid speed decreases, and fluid pressure increases.", "Fluid speed increases, and fluid pressure decreases.", "Fluid speed decreases, and fluid pressure decreases."], correct: 2 },
+        { text: "When medical personnel operate diagnostic X-ray machines or handle radiotherapy equipment in a hospital setting, which protective measure is most effective at reducing their occupational exposure to ionizing radiation?", options: ["Wearing standard surgical cotton masks and gloves.", "Standing behind structural protective barriers lined with lead shielding and increasing distance from the source.", "Keeping the room well-ventilated with fans to disperse air molecules.", "Coating their skin with UV-blocking sunscreen lotions."], correct: 1 },
+        { text: "Which of the following statements correctly identifies a fundamental characteristic of electromagnetic waves propagating through a vacuum?", options: ["The electric field vector E and magnetic field vector B oscillate in phase and are parallel to each other.", "The waves require a highly rarefied elastic medium to propagate.", "The electric and magnetic field vectors are perpendicular to each other and both are perpendicular to the direction of wave propagation.", "Higher frequency electromagnetic waves travel faster through empty space than lower frequency waves."], correct: 2 },
+        { text: "Why does 1 kg of steam at 100°C cause much more severe tissue burns to human skin than 1 kg of liquid water at 100°C?", options: ["Steam has a higher temperature than boiling water.", "Steam has a much higher specific heat capacity than liquid water.", "Steam releases a massive amount of latent heat of vaporization as it condenses onto the cooler skin before cooling down as liquid water.", "Steam transfers heat strictly via radiation, which penetrates deeper into tissues."], correct: 2 }
+    ];
+
+    console.log("Loaded", questions.length, "Physics questions");
+
+    let userAnswers = new Array(questions.length).fill(null);
+    let flagged = new Array(questions.length).fill(false);
+    let currentPage = 0;
+    const QUESTIONS_PER_PAGE = 15;
+    let timeSeconds = 5400;
+    let timerInterval = null;
+
+    const questionsContainer = document.getElementById('questionsContainer');
+    const qnButtonsContainer = document.getElementById('qnButtons');
+    const nextPageBtn = document.getElementById('nextPageBtn');
+    const finishAttemptLink = document.getElementById('finishAttemptLink');
+    const quizTimeLeft = document.getElementById('quiz-time-left');
+    const quizTimer = document.getElementById('quizTimer');
+    const openDrawerBtn = document.getElementById('openDrawerBtn');
+    const closeDrawerBtn = document.getElementById('closeDrawerBtn');
+    const quizDrawer = document.getElementById('quizDrawer');
+    const drawerOverlay = document.getElementById('drawerOverlay');
+    const summaryModal = document.getElementById('summaryModal');
+    const scoreModal = document.getElementById('scoreModal');
+    const logoutBtn = document.getElementById('logoutBtn');
+
+    function formatTime(sec) {
+        let hours = Math.floor(sec / 3600);
+        let minutes = Math.floor((sec % 3600) / 60);
+        let seconds = sec % 60;
+        return `${hours.toString().padStart(2,'0')}:${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')}`;
+    }
+
+    function updateTimerDisplay() {
+        quizTimeLeft.textContent = formatTime(timeSeconds);
+        if (timeSeconds <= 100) {
+            quizTimer.classList.add('warning');
+        }
+    }
+
+    function saveToLocalStorage() {
+        localStorage.setItem('physics_answers', JSON.stringify(userAnswers));
+        localStorage.setItem('physics_flagged', JSON.stringify(flagged));
+    }
+
+    function loadFromLocalStorage() {
+        let saved = localStorage.getItem('physics_answers');
+        if (saved) userAnswers = JSON.parse(saved);
+        let savedFlags = localStorage.getItem('physics_flagged');
+        if (savedFlags) flagged = JSON.parse(savedFlags);
+    }
+
+    function renderQuestions() {
+        const start = currentPage * QUESTIONS_PER_PAGE;
+        const end = Math.min(start + QUESTIONS_PER_PAGE, questions.length);
+        let html = '';
+
+        for (let i = start; i < end; i++) {
+            const q = questions[i];
+            const userAnswer = userAnswers[i];
+            const isFlagged = flagged[i];
+            const stateText = userAnswer === null ? 'Not yet answered' : 'Answered';
+
+            html += `
+                <div class="que" id="q-${i}">
+                    <div class="info">
+                        <h3 class="no">Question <span class="qno">${i+1}</span></h3>
+                        <div class="state">${stateText}</div>
+                        <div class="questionflag editable">
+                            <a class="flag-action ${isFlagged ? 'active' : ''}" onclick="toggleFlag(${i})">⚐ ${isFlagged ? 'Remove flag' : 'Flag question'}</a>
+                        </div>
+                    </div>
+                    <div class="content">
+                        <div class="qtext">${q.text}</div>
+                        <fieldset class="ablock">
+                            <div class="answer">
+            `;
+
+            q.options.forEach((opt, optIdx) => {
+                const checked = (userAnswer === optIdx) ? 'checked' : '';
+                const letter = String.fromCharCode(97 + optIdx);
+                html += `
+                    <div class="r${optIdx % 2 === 0 ? '0' : '1'}">
+                        <input type="radio" name="q${i}" value="${optIdx}" id="q${i}_${optIdx}" ${checked} onclick="selectOption(${i}, ${optIdx})">
+                        <label for="q${i}_${optIdx}"><span class="answernumber">${letter}. </span>${opt}</label>
+                    </div>
+                `;
+            });
+
+            html += `
+                            </div>
+                            <div class="qtype_multichoice_clearchoice">
+                                <a onclick="clearChoice(${i})">Clear my choice</a>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+            `;
+        }
+
+        questionsContainer.innerHTML = html;
+        renderNavButtons();
+        updatePageNavButtons();
+    }
+
+    function renderNavButtons() {
+        qnButtonsContainer.innerHTML = '';
+        const totalPages = Math.ceil(questions.length / QUESTIONS_PER_PAGE);
+        
+        for (let i = 0; i < questions.length; i++) {
+            const isAnswered = userAnswers[i] !== null;
+            const isFlagged = flagged[i];
+            const targetPage = Math.floor(i / QUESTIONS_PER_PAGE);
+            const isOnCurrentPage = (currentPage === targetPage);
+            
+            let btnClass = 'qnbutton';
+            if (isAnswered) btnClass += ' answered';
+            if (isFlagged) btnClass += ' flagged';
+            if (isOnCurrentPage) btnClass += ' thispage';
+            
+            const btn = document.createElement('a');
+            btn.className = btnClass;
+            btn.textContent = (i + 1).toString();
+            
+            // FIXED: Navigate to correct page before scrolling
+            btn.onclick = (function(idx, targetPg) {
+                return function() {
+                    if (currentPage !== targetPg) {
+                        currentPage = targetPg;
+                        renderQuestions();
+                    }
+                    scrollToQuestion(idx);
+                    closeDrawer();
+                };
+            })(i, targetPage);
+            
+            qnButtonsContainer.appendChild(btn);
+        }
+    }
+
+    function updatePageNavButtons() {
+        const totalPages = Math.ceil(questions.length / QUESTIONS_PER_PAGE);
+        const navDiv = document.getElementById('pageNavButtons');
+        if (currentPage === 0) {
+            navDiv.innerHTML = `<button class="mod_quiz-next-nav" id="nextPageBtn">Next page</button>`;
+            document.getElementById('nextPageBtn').onclick = () => changePage(1);
+        } else if (currentPage === totalPages - 1) {
+            navDiv.innerHTML = `<button class="mod_quiz-prev-nav" id="prevPageBtn">Previous page</button>`;
+            document.getElementById('prevPageBtn').onclick = () => changePage(-1);
+        } else {
+            navDiv.innerHTML = `
+                <button class="mod_quiz-prev-nav" id="prevPageBtn">Previous page</button>
+                <button class="mod_quiz-next-nav" id="nextPageBtn">Next page</button>
+            `;
+            document.getElementById('prevPageBtn').onclick = () => changePage(-1);
+            document.getElementById('nextPageBtn').onclick = () => changePage(1);
+        }
+    }
+
+    window.selectOption = function(qid, optIdx) {
+        userAnswers[qid] = optIdx;
+        saveToLocalStorage();
+        renderQuestions();
+    };
+
+    window.clearChoice = function(qid) {
+        userAnswers[qid] = null;
+        saveToLocalStorage();
+        renderQuestions();
+    };
+
+    window.toggleFlag = function(qid) {
+        flagged[qid] = !flagged[qid];
+        saveToLocalStorage();
+        renderQuestions();
+    };
+
+    function scrollToQuestion(qid) {
+        const element = document.getElementById(`q-${qid}`);
+        if (element) {
+            element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    }
+
+    function changePage(delta) {
+        const totalPages = Math.ceil(questions.length / QUESTIONS_PER_PAGE);
+        const newPage = currentPage + delta;
+        if (newPage >= 0 && newPage < totalPages) {
+            currentPage = newPage;
+            renderQuestions();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            closeDrawer();
+        }
+    }
+
+    function openDrawer() {
+        quizDrawer.classList.add('open');
+        drawerOverlay.classList.add('show');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeDrawer() {
+        quizDrawer.classList.remove('open');
+        drawerOverlay.classList.remove('show');
+        document.body.style.overflow = '';
+    }
+
+    openDrawerBtn.onclick = openDrawer;
+    closeDrawerBtn.onclick = closeDrawer;
+    drawerOverlay.onclick = closeDrawer;
+
+    function startTimer() {
+        if (timerInterval) clearInterval(timerInterval);
+        timerInterval = setInterval(() => {
+            if (timeSeconds <= 0) {
+                clearInterval(timerInterval);
+                quizTimeLeft.textContent = "00:00:00";
+                alert("Time is up! Submitting your exam...");
+                showSummary();
+            } else {
+                timeSeconds--;
+                updateTimerDisplay();
+            }
+        }, 1000);
+    }
+
+    function calculateScore() {
+        let correct = 0;
+        for (let i = 0; i < questions.length; i++) {
+            if (userAnswers[i] !== null && userAnswers[i] === questions[i].correct) {
+                correct++;
+            }
+        }
+        return { correct, total: questions.length, percentage: Math.round((correct / questions.length) * 100) };
+    }
+
+    function showSummary() {
+        if (timerInterval) clearInterval(timerInterval);
+        let summaryHtml = '';
+        for (let i = 0; i < questions.length; i++) {
+            const isAnswered = userAnswers[i] !== null;
+            const isCorrect = isAnswered && userAnswers[i] === questions[i].correct;
+            let statusClass = '';
+            let statusText = '';
+            if (!isAnswered) {
+                statusClass = 'summary-wrong';
+                statusText = 'Not answered';
+            } else if (isCorrect) {
+                statusClass = 'summary-correct';
+                statusText = 'Correct';
+            } else {
+                statusClass = 'summary-wrong';
+                statusText = 'Wrong';
+            }
+            summaryHtml += `
+                <div class="summary-item" onclick="goToQuestionAndClose(${i})">
+                    <strong>Question ${i+1}</strong>: <span class="${statusClass}">${statusText}</span>
+                </div>
+            `;
+        }
+        document.getElementById('summaryList').innerHTML = summaryHtml;
+        summaryModal.style.display = 'flex';
+        closeDrawer();
+    }
+    
+    function goToQuestionAndClose(qid) {
+        const targetPage = Math.floor(qid / QUESTIONS_PER_PAGE);
+        if (currentPage !== targetPage) {
+            currentPage = targetPage;
+            renderQuestions();
+        }
+        scrollToQuestion(qid);
+        summaryModal.style.display = 'none';
+        startTimer();
+        closeDrawer();
+    }
+
+    function showFinalScore() {
+        const score = calculateScore();
+        let wrongList = '';
+        for (let i = 0; i < questions.length; i++) {
+            if (userAnswers[i] === null || userAnswers[i] !== questions[i].correct) {
+                const status = userAnswers[i] === null ? 'Not answered' : 'Wrong';
+                const correctLetter = String.fromCharCode(97 + questions[i].correct);
+                wrongList += `<li>Q${i+1}: ${status} (Correct: ${correctLetter}. ${questions[i].options[questions[i].correct]})</li>`;
+            }
+        }
+        document.getElementById('scoreDetails').innerHTML = `
+            <p style="font-size: 1.5rem; text-align: center;"><strong>${score.correct}/${score.total}</strong> (${score.percentage}%)</p>
+            <hr>
+            <p><strong>Review:</strong></p>
+            <ul style="max-height: 300px; overflow-y: auto;">${wrongList || '<li>Perfect score! All correct!</li>'}</ul>
+            <p style="margin-top: 15px; font-size: 0.8rem; color: #6a737b;">This is a practice exam. Your answers are saved locally.</p>
+        `;
+        summaryModal.style.display = 'none';
+        scoreModal.style.display = 'flex';
+    }
+
+    finishAttemptLink.onclick = (e) => {
+        e.preventDefault();
+        showSummary();
+    };
+
+    document.getElementById('cancelSummaryBtn').onclick = () => {
+        summaryModal.style.display = 'none';
+        startTimer();
+    };
+
+    document.getElementById('submitFinalBtn').onclick = showFinalScore;
+    document.getElementById('closeScoreBtn').onclick = () => {
+        scoreModal.style.display = 'none';
+    };
+
+    function logout() {
+        localStorage.clear();
+        window.location.href = 'index.html';
+    }
+
+    logoutBtn.onclick = logout;
+
+    function checkLogin() {
+        const loggedIn = localStorage.getItem('hayyo_logged_in');
+        if (!loggedIn || loggedIn !== 'true') {
+            window.location.href = 'index.html';
+        }
+    }
+
+    function init() {
+        checkLogin();
+        loadFromLocalStorage();
+        renderQuestions();
+        updateTimerDisplay();
+        startTimer();
+    }
+
+    init();
+
+    window.addEventListener('beforeunload', function(e) {
+        const answered = userAnswers.filter(a => a !== null).length;
+        if (answered > 0 && answered < questions.length && timeSeconds > 0) {
+            e.preventDefault();
+            e.returnValue = 'You have unsaved answers. Are you sure you want to leave?';
+            return e.returnValue;
+        }
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Chemistry Exam - Round 1 | Online ESSLCE-equivalent Practice Portal</title>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" id="MathJax-script" async></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: #f0f2f5;
+            color: #1d2125;
+            line-height: 1.5;
+            font-size: 0.9375rem;
+            overflow-x: hidden;
+        }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 1rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+            z-index: 1030;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .navbar-brand {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #0f6cbf;
+            text-decoration: none;
+        }
+
+        .navbar-brand span {
+            font-size: 0.7rem;
+            font-weight: normal;
+            color: #6a737b;
+        }
+
+        .navbar-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .quiz-timer {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 2rem;
+            padding: 0.4rem 1rem;
+            font-family: monospace;
+            font-weight: bold;
+            font-size: 1rem;
+        }
+
+        .quiz-timer.warning {
+            background: #ca3120;
+            color: white;
+            border-color: #a01a0c;
+        }
+
+        .drawer-toggle {
+            background: #0f6cbf;
+            border: none;
+            color: white;
+            padding: 0.4rem 0.8rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .drawer-toggle:hover {
+            background: #094478;
+        }
+
+        .logout-btn {
+            background: none;
+            border: 1px solid #dee2e6;
+            padding: 0.4rem 0.8rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            color: #6a737b;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+
+        .logout-btn:hover {
+            background: #ca3120;
+            color: white;
+            border-color: #ca3120;
+        }
+
+        .drawer-right {
+            position: fixed;
+            top: 60px;
+            right: -320px;
+            width: 320px;
+            height: calc(100% - 60px);
+            background: white;
+            box-shadow: -2px 0 8px rgba(0,0,0,0.1);
+            z-index: 1020;
+            transition: right 0.3s ease;
+            overflow-y: auto;
+            padding: 1rem;
+            border-left: 1px solid #dee2e6;
+        }
+
+        .drawer-right.open {
+            right: 0;
+        }
+
+        .drawer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 1rem;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .drawer-header h3 {
+            font-size: 1rem;
+            margin: 0;
+        }
+
+        .drawer-close {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+        }
+
+        .drawer-overlay {
+            position: fixed;
+            top: 60px;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.3);
+            z-index: 1015;
+            display: none;
+        }
+
+        .drawer-overlay.show {
+            display: block;
+        }
+
+        .qn-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .qnbutton {
+            display: inline-block;
+            width: 2.5rem;
+            height: 2.5rem;
+            line-height: 2.5rem;
+            text-align: center;
+            background: #fff;
+            border: 1px solid #bbb;
+            border-radius: 0.25rem;
+            text-decoration: none;
+            color: #1d2125;
+            font-weight: bold;
+            font-size: 0.9rem;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .qnbutton.thispage {
+            border: 2px solid #0f6cbf;
+            font-weight: bold;
+        }
+
+        .qnbutton.answered {
+            background: #d4edda;
+            border-color: #28a745;
+            color: #155724;
+        }
+
+        .qnbutton.flagged::after {
+            content: "⚑";
+            position: absolute;
+            top: -5px;
+            right: -3px;
+            background: #ca3120;
+            color: white;
+            font-size: 10px;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .othernav {
+            margin-top: 1rem;
+            padding-top: 0.5rem;
+            border-top: 1px solid #dee2e6;
+        }
+
+        .endtestlink {
+            display: block;
+            text-align: center;
+            background: #28a745;
+            color: white;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            text-decoration: none;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .endtestlink:hover {
+            background: #1e7e34;
+        }
+
+        .breadcrumb-container {
+            background: white;
+            padding: 0.75rem 1.5rem;
+            border-bottom: 1px solid #dee2e6;
+            margin-top: 60px;
+        }
+
+        .breadcrumb {
+            max-width: 1400px;
+            margin: 0 auto;
+            font-size: 0.8rem;
+        }
+
+        .breadcrumb a {
+            color: #0f6cbf;
+            text-decoration: none;
+        }
+
+        .page-header {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1rem 1.5rem 0 1.5rem;
+        }
+
+        .page-header h1 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #1d2125;
+        }
+
+        .main-wrapper {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1.5rem;
+        }
+
+        .main-content {
+            background: white;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .que {
+            margin-bottom: 2rem;
+            clear: left;
+            border-bottom: 1px solid #dee2e6;
+            padding-bottom: 1rem;
+            background: #f8f9fa;
+            border-radius: 0.5rem;
+            padding: 1.25rem;
+            border: 1px solid #dee2e6;
+        }
+
+        .info {
+            float: left;
+            width: 7rem;
+            padding: 0.5rem;
+            background: #e9ecef;
+            border: 1px solid #dee2e6;
+            border-radius: 0.25rem;
+            margin-right: 1rem;
+        }
+
+        .qno {
+            font-size: 1.3rem;
+            font-weight: bold;
+        }
+
+        .state {
+            font-size: 0.7rem;
+            color: #6a737b;
+        }
+
+        .questionflag {
+            margin-top: 0.5rem;
+        }
+
+        .flag-action {
+            background: none;
+            border: none;
+            color: #adb5bd;
+            cursor: pointer;
+            font-size: 0.75rem;
+        }
+
+        .flag-action.active {
+            color: #ca3120;
+        }
+
+        .content {
+            margin-left: 8rem;
+        }
+
+        .qtext {
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+
+        .ablock {
+            margin: 0.7rem 0;
+        }
+
+        .answer {
+            margin-bottom: 0.5rem;
+        }
+
+        .r0, .r1 {
+            padding: 0.3rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .r0 input, .r1 input {
+            margin: 0;
+        }
+
+        .answernumber {
+            font-weight: normal;
+            min-width: 1.5rem;
+        }
+
+        .qtype_multichoice_clearchoice {
+            text-align: right;
+            margin-top: 0.5rem;
+        }
+
+        .qtype_multichoice_clearchoice a {
+            color: #0f6cbf;
+            font-size: 0.75rem;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .submitbtns {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+        }
+
+        .mod_quiz-next-nav, .mod_quiz-prev-nav {
+            background: #0f6cbf;
+            color: white;
+            border: none;
+            padding: 0.5rem 1.5rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .summary-item {
+            padding: 0.5rem;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .modal-btn-primary, .modal-btn-secondary {
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            flex: 1;
+            border: none;
+        }
+
+        .modal-btn-primary {
+            background: #28a745;
+            color: white;
+        }
+
+        .modal-btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        footer {
+            text-align: center;
+            padding: 1.5rem;
+            color: #6a737b;
+            font-size: 0.75rem;
+            border-top: 1px solid #dee2e6;
+            margin-top: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .info {
+                float: none;
+                width: auto;
+                margin-bottom: 1rem;
+            }
+            .content {
+                margin-left: 0;
+            }
+            .drawer-right {
+                width: 280px;
+            }
+            .navbar-brand {
+                font-size: 0.8rem;
+            }
+            .quiz-timer {
+                font-size: 0.8rem;
+                padding: 0.3rem 0.6rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <a href="#" class="navbar-brand">🏫 Online ESSLCE-equivalent<br><span>Exam Practice Portal</span></a>
+    <div class="navbar-right">
+        <div class="quiz-timer" id="quizTimer">Time left <span id="quiz-time-left">01:30:00</span></div>
+        <button class="drawer-toggle" id="openDrawerBtn">📋 Navigation</button>
+        <button class="logout-btn" id="logoutBtn">🚪 Logout</button>
+    </div>
+</nav>
+
+<div class="drawer-right" id="quizDrawer">
+    <div class="drawer-header">
+        <h3>Quiz navigation</h3>
+        <button class="drawer-close" id="closeDrawerBtn">✕</button>
+    </div>
+    <div class="qn-buttons" id="qnButtons"></div>
+    <div class="othernav">
+        <a class="endtestlink" id="finishAttemptLink">Finish attempt ...</a>
+    </div>
+</div>
+<div class="drawer-overlay" id="drawerOverlay"></div>
+
+<div class="breadcrumb-container">
+    <div class="breadcrumb">
+        <a href="rounds.html">Home</a> / <a href="exams1.html">Round 1</a> / <span>Chemistry</span>
+    </div>
+</div>
+
+<div class="page-header">
+    <h1>Chemistry</h1>
+</div>
+
+<div class="main-wrapper">
+    <div class="main-content">
+        <div id="questionsContainer"></div>
+        <div class="submitbtns" id="pageNavButtons">
+            <button class="mod_quiz-next-nav" id="nextPageBtn">Next page</button>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <p>© 2026 Online ESSLCE-equivalent Exam Practice Portal | Chemistry - Round 1</p>
+</footer>
+
+<div id="summaryModal" class="modal">
+    <div class="modal-content">
+        <h2>📋 Quiz Summary</h2>
+        <div id="summaryList"></div>
+        <div class="modal-buttons">
+            <button class="modal-btn-secondary" id="cancelSummaryBtn">Go back</button>
+            <button class="modal-btn-primary" id="submitFinalBtn">Submit all and finish</button>
+        </div>
+    </div>
+</div>
+
+<div id="scoreModal" class="modal">
+    <div class="modal-content">
+        <h2>📊 Exam Results</h2>
+        <div id="scoreDetails"></div>
+        <button class="modal-btn-primary" id="closeScoreBtn">Close</button>
+    </div>
+</div>
+
+<script>
+    // ============================================
+    // CHEMISTRY EXAM - 60 QUESTIONS (Round 1)
+    // Based on extracted content from original HU exam
+    // FIXED: Navigation now jumps to correct page
+    // ============================================
+
+    const questions = [
+        // Questions 1-15
+        { text: "A voltaic cell was constructed from aluminum electrode immersed in 1.0 M aqueous solution of aluminium chloride solution and nickel electrode immersed in 1.0 M aqueous solution of nickel chloride. Which one of the following cell notation is the CORRECT for the above voltaic cell?", options: ["Al³⁺(aq,1.0M)|Al(s) || Ni(s)|Ni²⁺(aq, 1.0M)", "Al(s) | Al³⁺(aq, 1.0M) || Ni²⁺(aq, 1.0M) | Ni(s)", "Ni²⁺(aq,1.0M) | Ni(s) || Al(s) | Al³⁺(aq,1.0M)", "Ni(s) | Ni²⁺(aq, 1.0M) || Al³⁺(aq, 1.0M) | Al(s)"], correct: 1 },
+        { text: "A shift in an ionic equilibrium caused by the addition of a solute that provides an ion that takes part in the equilibrium is known as.", options: ["Common-ion effect", "Leveling effect", "Buffer", "Conjugation"], correct: 0 },
+        { text: "An experiment that lead to the discovery of the charge of an electron is:", options: ["Discharge tube experiment", "Oil drop experiment", "Alpha particles scattering experiment", "Bombarding a thin foil of beryllium with α-particles"], correct: 1 },
+        { text: "Consider the reaction: Cu²⁺(0.01M) + Fe(s) → Cu(s) + Fe²⁺(0.001M), E°cell = 1.10 V. What is the value of Ecell?", options: ["+1.0704V", "+1.1296V", "-1.0704V", "-1.1296V"], correct: 0 },
+        { text: "Ether is more volatile than alcohol having the same molecular formula. This is due to:", options: ["Intermolecular H-bonding in ether", "Intermolecular H-bonding in alcohol", "Dipolar character of ether", "Alcohols have resonating structures"], correct: 1 },
+        { text: "In the context of green chemistry, what does 'ATOM ECONOMY' refer to?", options: ["The cost-effectiveness of chemical processes", "The sustainability of raw materials", "The efficiency of a reaction in converting starting materials to final products", "The availability of environmental resources"], correct: 2 },
+        { text: "Iron spoons are usually corroded and become useless through time when exposed to air and moisture. What will be the appropriate electrochemical cell arrangement for electroplating iron spoon with silver metal?", options: ["The iron spoon is kept at anode being immersed in iron (II) chloride solution.", "Silver metal has to be kept at cathode being immersed in silver nitrate solution.", "The iron spoon is kept at cathode being immersed in silver-based electrolytic solution", "Silver metal has to be kept at cathode being immersed in iron (II) chloride solution."], correct: 2 },
+        { text: "Of the following, which one will lower the activation energy of a given reaction?", options: ["Raising the temperature of the reaction", "Increasing the concentrations of reactants", "Adding a catalyst for the reaction", "Removing products as the reaction proceeds"], correct: 2 },
+        { text: "One of the following is NOT TRUE about the commercial use of ammonia?", options: ["Ammonia is used in the production of sulfuric acid.", "Ammonia is used in the manufacturing of nitrogen fertilizers.", "Ammonia is used in the production of trinitrotoluene and gun powder.", "Ammonia is raw material in Ostwald process."], correct: 0 },
+        { text: "Part or environment of the earth that serves as a source of majority of elements and compounds is:", options: ["Atmosphere", "Hydrosphere", "Lithosphere", "Biosphere"], correct: 2 },
+        { text: "The correct order of increasing radii of the elements Na, Si, Al and P is:", options: ["Na, Al, Si, P", "Al, Si, P, Na", "P, Si, Al, Na", "Na, Al, P, Si"], correct: 2 },
+        { text: "The correct order of the ionic radii of O²⁻, N³⁻, F⁻, Mg²⁺, Na⁺ and Al³⁺ is:", options: ["Al³⁺ < Na⁺ < Mg²⁺ < O²⁻ < F⁻ < N³⁻", "N³⁻ < O²⁻ < F⁻ < Na⁺ < Mg²⁺ < Al³⁺", "Al³⁺ < Mg²⁺ < Na⁺ < F⁻ < O²⁻ < N³⁻", "N³⁻ < F⁻ < O²⁻ < Mg²⁺ < Na⁺ < Al³⁺"], correct: 2 },
+        { text: "The definite energies associated with specific wavelengths in the emission spectrum of atomic hydrogen suggest that:", options: ["Energy states in the hydrogen atom are quantized", "Electrons have a smaller rest mass than photons", "Photons have a smaller rest mass than electrons", "Atomic hydrogen is more stable and has a lower potential energy than molecular hydrogen"], correct: 0 },
+        { text: "The following redox reaction shows the discharging of Lead storage battery. Which one of the following statement is NOT TRUE based on the given reaction?", options: ["The anode of this cell is made of lead metal |Pb|.", "The cathode of this cell is made of lead (IV) oxide|PbO₂|.", "About 35% of H₂SO₄ is used as electrolyte in this cell.", "SO₄²⁻ ions are produced at both electrodes."], correct: 3 },
+        { text: "The name of reaction made between organic acid and alcohol is known as:", options: ["Saponification", "Hydrogenation", "Esterification", "Hydrolysis"], correct: 2 },
+        
+        // Questions 16-30
+        { text: "The number of equivalents of solute per liter of a solution is known as:", options: ["Molarity", "Molality", "Mole", "Normality"], correct: 3 },
+        { text: "The statement 'If a system at equilibrium is subjected to a stress, the system will readjust itself to reduce the effects of the stress' is known as:", options: ["Faradays law", "Avogadro's principle", "Boyle's law", "Le-Chatelier's principle"], correct: 3 },
+        { text: "What is the correct electron configuration of the Cu⁺¹ ion? (Atomic number Cu = 29)", options: ["[Ar] 3d⁹4s¹", "[Ar] 3d⁷4s²", "[Ar] 3d¹⁰", "[Ar] 3d⁸4s¹"], correct: 2 },
+        { text: "What is the definition of the term first ionization energy?", options: ["The energy released when one mole of electrons is removed from one mole of gaseous atoms.", "The energy required to remove one mole of electrons from one mole of gaseous atoms.", "The energy released when one mole of gaseous atoms gains one mole of electrons.", "The energy required to add one mole of electrons to one mole of gaseous atoms."], correct: 1 },
+        { text: "What is the electromotive force (EMF) of the following voltaic cell at 25°C for the cell Ni(s) | Ni²⁺(1.0M) || Sn²⁺(1.0 × 10⁻⁴M) | Sn(s). Given E° Ni²⁺/Ni = -0.25 V and Sn²⁺/Sn = -0.14V.", options: ["-0.01 V", "0.23 V", "0.13 V", "0.14 V"], correct: 1 },
+        { text: "What is the hybridization of carbon in Cl₂CO?", options: ["SP³", "SP", "SP³d", "SP²"], correct: 3 },
+        { text: "What titration corresponds to a titration curve with an initial pH of 9.5 and an equivalence point at pH 4.5?", options: ["Weak base to which strong acid is added", "Weak acid to which strong base is added", "Strong base to which strong acid is added", "Strong acid to which strong base is added"], correct: 0 },
+        { text: "What's the difference between the endpoint and equivalence point in a titration?", options: ["I, II and IV only", "II and V only", "II, IV and V only", "I, III, IV only"], correct: 1 },
+        { text: "When NaCl dissolves in water, aqueous Na⁺ and Cl⁻ ions result. The force of attraction that exists between Na⁺ and H₂O is called:", options: ["Dipole-dipole interaction", "Hydrogen bonding", "London dispersion force", "Ion-dipole interaction"], correct: 3 },
+        { text: "Which does NOT increase the speed of a reaction?", options: ["Increasing the particle size of one of the reactants", "Adding a catalyst", "Increasing the concentration of one of the reactants", "Increasing the temperature"], correct: 0 },
+        { text: "Which of the following alcohols has the highest boiling point?", options: ["1-propanol", "1,2-propanediol", "1,2,3-propanetriol", "Methanol"], correct: 2 },
+        { text: "Which of the following best describes the mechanism of the greenhouse effect in Earth's atmosphere?", options: ["Ultraviolet radiation from the Sun is absorbed by ozone gas in the stratosphere.", "Gamma radiation from the Sun is absorbed at ground level by dust particles.", "Infrared radiation from Earth's surface is absorbed by gases in the atmosphere.", "Cosmic radiation from deep space is absorbed by gases in the atmosphere"], correct: 2 },
+        { text: "Which of the following combinations produces an effective buffer solution?", options: ["Equal moles of a strong acid and a strong base", "Significant amounts of a weak acid and its conjugate base", "A large amount of strong acid and small amount of strong base", "Equal moles of a strong acid and its conjugate base"], correct: 1 },
+        { text: "Which of the following factors does NOT affect the rate of a chemical reaction?", options: ["Concentration of reactants", "Presence of a catalyst", "Molecular weight of products", "Temperature"], correct: 2 },
+        { text: "Which of the following is NOT one of the 12 principles of green chemistry?", options: ["Prevent waste instead of treating it", "Use catalysts instead of stoichiometric reagents", "Maximize the use of non-renewable resources", "Design safer chemicals and products"], correct: 2 },
+        
+        // Questions 31-45
+        { text: "Which of the following is TRUE regarding polyhydric alcohols?", options: ["It should have one or more OH groups", "It should have two or more OH groups", "It should have three or more OH groups", "It should have more than four OH groups"], correct: 1 },
+        { text: "Which of the following rules states that no two electrons in an atom can have the same set of four quantum numbers?", options: ["Hund's rule", "The Heisenberg uncertainty principle", "The Pauli exclusion principle", "The de Broglie hypothesis"], correct: 2 },
+        { text: "Which of these characteristics describe the PCl₃ molecule?", options: ["I and II only", "II and III only", "II, III, and IV only", "Only II"], correct: 1 },
+        { text: "Which one of the following atomic models was developed with a preposition that electrons can be described only in terms of the probability of their location?", options: ["Quantum mechanical model", "Rutherford model", "Dalton's model", "Bohr model"], correct: 0 },
+        { text: "Which one of the following is NOT CORRECT about refining of impure metals using electrolysis?", options: ["The impure metal be refined is kept at anode.", "Purest form of the same metal as the impure metal is kept at cathode", "Aqueous solution of a salt different from the one to be purified is used as an electrolyte.", "The impure metal is transferred from anode to cathode after being oxidized at anode and then reduced at the cathode."], correct: 2 },
+        { text: "Which one of the following is NOT the major function of salt bridge in voltaic cells?", options: ["Salt bridge joins the two halves of an electrochemical cell.", "It completes the inner circuit.", "It is filled with a salt solution", "It does not maintain electrical neutrality of the electrolytic solutions of the half-cells."], correct: 3 },
+        { text: "Which one of the following is NOT true about Bohr's atomic theory?", options: ["The electron in the orbit nearest the nucleus have the lowest energy", "The model was based on the wave properties of the electron", "The energy of an electron in certain orbit remains constant", "Angular momentum of electron is quantized"], correct: 1 },
+        { text: "Which one of the following is NOT TRUE about electrolytic conduction?", options: ["Passage of current through electrolytes is accompanied by chemical changes", "The conductivity of electrolytes decrease with increase in temperature", "There is actual transfer of matter", "The conductivity of electrolytes increases with increase in temperature"], correct: 1 },
+        { text: "Which one of the following is TRUE about Arrhenius concept of acid-base?", options: ["An acid is a substance that dissociates in water to form hydroxide ions.", "An acid is a substance that dissociates in water to form hydrogen ions.", "An acid decreases the concentration of hydrogen ions in aqueous solutions.", "A base decreases the concentration of hydroxide ions in an aqueous solution."], correct: 1 },
+        { text: "Which one of the following is TRUE about the relative strength of a base?", options: ["Ionization of a base increases with its strength.", "Ionization of a base decreases with its strength.", "Weak bases dissociate completely in water.", "Strong bases dissociate partially in water"], correct: 0 },
+        { text: "Which one of the following statement is TRUE about oxidation-reduction reactions?", options: ["Oxidation can take place in the absence of reduction.", "The reduced reactant is electron provider.", "In the process of a redox reaction, the oxidation number of the oxidized species increases.", "Oxidizing agents bring about reduction on the other reactant."], correct: 2 },
+        { text: "Which one of the following statements is NOT TRUE about voltaic cells and electrolytic cells?", options: ["In voltaic cells, anode is the negative electrode whereas in electrolytic cells cathode is the negative electrode.", "In both cells, electrons physically move from the anode to the cathode through the external wire or circuit.", "Voltaic cells operate for spontaneous reaction whereas electrolytic cells use electrical energy to drive a non-spontaneous reaction", "In voltaic cells, reduction takes place at the negative anode electrode while in electrolytic cells, reduction takes place at the positive anode electrode"], correct: 3 },
+        { text: "Which one of the following substances conducts electricity due to the presence of free electrons?", options: ["Copper metal", "Nitric acid solution", "Molten sodium chloride", "Hydrochloric acid solution"], correct: 0 },
+        { text: "Which process is used to produce Diammonium Phosphate (DAP)?", options: ["Reacting phosphoric acid with ammonia", "Reacting sulfuric acid with phosphate rock", "Mixing potassium chloride with ammonium sulfate", "Reacting nitric acid with phosphate rock"], correct: 0 },
+        { text: "Which reagent is commonly used to prepare ethers by Williamson synthesis?", options: ["Alcohol and alkyl halide", "Phenol and acid", "Alkene and water", "Carboxylic acid and alcohol"], correct: 0 },
+        
+        // Questions 46-60
+        { text: "Which type of glass is made of pure silica, possesses an extremely high melting point, and allows ultraviolet light to pass through it?", options: ["Potash-lime glass", "Quartz glass", "Soda-lime glass", "Borosilicate glass"], correct: 1 },
+        { text: "Why does a buffer solution resist pH changes upon the addition of a strong acid?", options: ["The conjugate acid neutralizes the added (H⁺) ions", "The weak acid reacts with the added (OH⁻) ions", "The conjugate base neutralizes the added (H⁺) ions", "The water in the buffer instantly decomposes the acid"], correct: 2 },
+        { text: "The electronegativities of four elements are given: W=0.9, X=3.0, Y=4.0, Z=2.0. Which statement is CORRECT?", options: ["W and X form an ionic compound.", "W and X form a covalent compound.", "Y and Z form an ionic compound.", "Y and Z form a covalent compound."], correct: 0 },
+        { text: "A 0.25M solution of a weak acid HA is 3% ionized at 25°C. What is the Ka value?", options: ["2.3 × 10⁻⁴", "4.5 × 10⁻⁵", "1.2 × 10⁻³", "6.7 × 10⁻⁴"], correct: 0 },
+        { text: "Calculate the value of dissociation constant of weak monoprotic acid if it dissociates to 2% in 0.1 M solution?", options: ["4 × 10⁻⁵", "6 × 10⁻⁵", "2 × 10⁻⁵", "1 × 10⁻⁵"], correct: 0 },
+        { text: "An aqueous solution containing a concentration of 2.5 × 10⁻⁸ OH⁻ ions will have a pH of which of the following?", options: ["4.40", "6.42", "7.40", "7.60"], correct: 2 },
+        { text: "Two cells are connected in series. One contains CuSO₄ solution and the other contains Al₂(SO₄)₃ solution. If 45g of Al is deposited, how much copper is deposited? (Cu=64, Al=27)", options: ["320g", "160g", "180g", "16g"], correct: 1 },
+        { text: "What is the correct IUPAC name for the compound 3,4-dimethylhexane?", options: ["3,4-dimethylhexane", "2-ethyl-3-methylpentane", "3-methyl-4-ethylpentane", "2,3-diethylbutane"], correct: 0 },
+        { text: "What is the IUPAC name of the compound 2-Chloro-5-hydroxy hexane?", options: ["2-Chloro-5-hydroxy hexane", "5-chlorohexane-2-ol", "2-chlorohexan-5-ol", "5-hydroxy-2-chloro hexane"], correct: 0 },
+        { text: "Three functional groups found in a compound are:", options: ["Alcohol, Aromatic, and Ether", "Alcohol, Aldehyde, and Ether", "Alcohol, Ether, and Ketone", "Aldehyde, Ether, and Carboxylic acid"], correct: 0 },
+        { text: "The structure of a polymer is shown. The systematic name of the alkene monomer that forms this polymer is:", options: ["2-methyl-3-ethylpropene", "2-methylpent-2-ene", "2-methylpent-3-ene", "4-methylpent-2-ene"], correct: 1 },
+        { text: "Which alcohol can be oxidized by K₂Cr₂O₇ and H₂SO₄ to form a ketone?", options: ["2-propanol", "2-butanol", "2-methyl-2-propanol", "1-propanol"], correct: 0 },
+        { text: "Which of the following reactions represents a redox-reaction?", options: ["AgNO₃ + NaCl → AgCl + NaNO₃", "Zn + CuSO₄ → ZnSO₄ + Cu", "NaOH + HCl → NaCl + H₂O", "CaCO₃ → CaO + CO₂"], correct: 1 },
+        { text: "What is the correct IUPAC name for the following compound? (image of chemical structure)", options: ["3,4-dimethylhexane", "2-ethyl-3-methylpentane", "3-methyl-4-ethylpentane", "2,3-diethylbutane"], correct: 0 },
+        { text: "In the reaction, identify the conjugate acid-base pairs", options: ["H₃O⁺ and H₂O", "HPO₄²⁻ and H₃O⁺", "H₂O and OH⁻", "HPO₄²⁻ and PO₄³⁻"], correct: 0 }
+    ];
+
+    console.log("Loaded", questions.length, "Chemistry questions");
+
+    let userAnswers = new Array(questions.length).fill(null);
+    let flagged = new Array(questions.length).fill(false);
+    let currentPage = 0;
+    const QUESTIONS_PER_PAGE = 15;
+    let timeSeconds = 5400;
+    let timerInterval = null;
+
+    const questionsContainer = document.getElementById('questionsContainer');
+    const qnButtonsContainer = document.getElementById('qnButtons');
+    const nextPageBtn = document.getElementById('nextPageBtn');
+    const finishAttemptLink = document.getElementById('finishAttemptLink');
+    const quizTimeLeft = document.getElementById('quiz-time-left');
+    const quizTimer = document.getElementById('quizTimer');
+    const openDrawerBtn = document.getElementById('openDrawerBtn');
+    const closeDrawerBtn = document.getElementById('closeDrawerBtn');
+    const quizDrawer = document.getElementById('quizDrawer');
+    const drawerOverlay = document.getElementById('drawerOverlay');
+    const summaryModal = document.getElementById('summaryModal');
+    const scoreModal = document.getElementById('scoreModal');
+    const logoutBtn = document.getElementById('logoutBtn');
+
+    function formatTime(sec) {
+        let hours = Math.floor(sec / 3600);
+        let minutes = Math.floor((sec % 3600) / 60);
+        let seconds = sec % 60;
+        return `${hours.toString().padStart(2,'0')}:${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')}`;
+    }
+
+    function updateTimerDisplay() {
+        quizTimeLeft.textContent = formatTime(timeSeconds);
+        if (timeSeconds <= 100) {
+            quizTimer.classList.add('warning');
+        }
+    }
+
+    function saveToLocalStorage() {
+        localStorage.setItem('chemistry_answers', JSON.stringify(userAnswers));
+        localStorage.setItem('chemistry_flagged', JSON.stringify(flagged));
+    }
+
+    function loadFromLocalStorage() {
+        let saved = localStorage.getItem('chemistry_answers');
+        if (saved) userAnswers = JSON.parse(saved);
+        let savedFlags = localStorage.getItem('chemistry_flagged');
+        if (savedFlags) flagged = JSON.parse(savedFlags);
+    }
+
+    function renderQuestions() {
+        const start = currentPage * QUESTIONS_PER_PAGE;
+        const end = Math.min(start + QUESTIONS_PER_PAGE, questions.length);
+        let html = '';
+
+        for (let i = start; i < end; i++) {
+            const q = questions[i];
+            const userAnswer = userAnswers[i];
+            const isFlagged = flagged[i];
+            const stateText = userAnswer === null ? 'Not yet answered' : 'Answered';
+
+            html += `
+                <div class="que" id="q-${i}">
+                    <div class="info">
+                        <h3 class="no">Question <span class="qno">${i+1}</span></h3>
+                        <div class="state">${stateText}</div>
+                        <div class="questionflag editable">
+                            <a class="flag-action ${isFlagged ? 'active' : ''}" onclick="toggleFlag(${i})">⚐ ${isFlagged ? 'Remove flag' : 'Flag question'}</a>
+                        </div>
+                    </div>
+                    <div class="content">
+                        <div class="qtext">${q.text}</div>
+                        <fieldset class="ablock">
+                            <div class="answer">
+            `;
+
+            q.options.forEach((opt, optIdx) => {
+                const checked = (userAnswer === optIdx) ? 'checked' : '';
+                const letter = String.fromCharCode(97 + optIdx);
+                html += `
+                    <div class="r${optIdx % 2 === 0 ? '0' : '1'}">
+                        <input type="radio" name="q${i}" value="${optIdx}" id="q${i}_${optIdx}" ${checked} onclick="selectOption(${i}, ${optIdx})">
+                        <label for="q${i}_${optIdx}"><span class="answernumber">${letter}. </span>${opt}</label>
+                    </div>
+                `;
+            });
+
+            html += `
+                            </div>
+                            <div class="qtype_multichoice_clearchoice">
+                                <a onclick="clearChoice(${i})">Clear my choice</a>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+            `;
+        }
+
+        questionsContainer.innerHTML = html;
+        renderNavButtons();
+        updatePageNavButtons();
+    }
+
+    function renderNavButtons() {
+        qnButtonsContainer.innerHTML = '';
+        const totalPages = Math.ceil(questions.length / QUESTIONS_PER_PAGE);
+        
+        for (let i = 0; i < questions.length; i++) {
+            const isAnswered = userAnswers[i] !== null;
+            const isFlagged = flagged[i];
+            const targetPage = Math.floor(i / QUESTIONS_PER_PAGE);
+            const isOnCurrentPage = (currentPage === targetPage);
+            
+            let btnClass = 'qnbutton';
+            if (isAnswered) btnClass += ' answered';
+            if (isFlagged) btnClass += ' flagged';
+            if (isOnCurrentPage) btnClass += ' thispage';
+            
+            const btn = document.createElement('a');
+            btn.className = btnClass;
+            btn.textContent = (i + 1).toString();
+            
+            btn.onclick = (function(idx, targetPg) {
+                return function() {
+                    if (currentPage !== targetPg) {
+                        currentPage = targetPg;
+                        renderQuestions();
+                    }
+                    scrollToQuestion(idx);
+                    closeDrawer();
+                };
+            })(i, targetPage);
+            
+            qnButtonsContainer.appendChild(btn);
+        }
+    }
+
+    function updatePageNavButtons() {
+        const totalPages = Math.ceil(questions.length / QUESTIONS_PER_PAGE);
+        const navDiv = document.getElementById('pageNavButtons');
+        if (currentPage === 0) {
+            navDiv.innerHTML = `<button class="mod_quiz-next-nav" id="nextPageBtn">Next page</button>`;
+            document.getElementById('nextPageBtn').onclick = () => changePage(1);
+        } else if (currentPage === totalPages - 1) {
+            navDiv.innerHTML = `<button class="mod_quiz-prev-nav" id="prevPageBtn">Previous page</button>`;
+            document.getElementById('prevPageBtn').onclick = () => changePage(-1);
+        } else {
+            navDiv.innerHTML = `
+                <button class="mod_quiz-prev-nav" id="prevPageBtn">Previous page</button>
+                <button class="mod_quiz-next-nav" id="nextPageBtn">Next page</button>
+            `;
+            document.getElementById('prevPageBtn').onclick = () => changePage(-1);
+            document.getElementById('nextPageBtn').onclick = () => changePage(1);
+        }
+    }
+
+    window.selectOption = function(qid, optIdx) {
+        userAnswers[qid] = optIdx;
+        saveToLocalStorage();
+        renderQuestions();
+    };
+
+    window.clearChoice = function(qid) {
+        userAnswers[qid] = null;
+        saveToLocalStorage();
+        renderQuestions();
+    };
+
+    window.toggleFlag = function(qid) {
+        flagged[qid] = !flagged[qid];
+        saveToLocalStorage();
+        renderQuestions();
+    };
+
+    function scrollToQuestion(qid) {
+        const element = document.getElementById(`q-${qid}`);
+        if (element) {
+            element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    }
+
+    function changePage(delta) {
+        const totalPages = Math.ceil(questions.length / QUESTIONS_PER_PAGE);
+        const newPage = currentPage + delta;
+        if (newPage >= 0 && newPage < totalPages) {
+            currentPage = newPage;
+            renderQuestions();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            closeDrawer();
+        }
+    }
+
+    function openDrawer() {
+        quizDrawer.classList.add('open');
+        drawerOverlay.classList.add('show');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeDrawer() {
+        quizDrawer.classList.remove('open');
+        drawerOverlay.classList.remove('show');
+        document.body.style.overflow = '';
+    }
+
+    openDrawerBtn.onclick = openDrawer;
+    closeDrawerBtn.onclick = closeDrawer;
+    drawerOverlay.onclick = closeDrawer;
+
+    function startTimer() {
+        if (timerInterval) clearInterval(timerInterval);
+        timerInterval = setInterval(() => {
+            if (timeSeconds <= 0) {
+                clearInterval(timerInterval);
+                quizTimeLeft.textContent = "00:00:00";
+                alert("Time is up! Submitting your exam...");
+                showSummary();
+            } else {
+                timeSeconds--;
+                updateTimerDisplay();
+            }
+        }, 1000);
+    }
+
+    function calculateScore() {
+        let correct = 0;
+        for (let i = 0; i < questions.length; i++) {
+            if (userAnswers[i] !== null && userAnswers[i] === questions[i].correct) {
+                correct++;
+            }
+        }
+        return { correct, total: questions.length, percentage: Math.round((correct / questions.length) * 100) };
+    }
+
+    function showSummary() {
+        if (timerInterval) clearInterval(timerInterval);
+        let summaryHtml = '';
+        for (let i = 0; i < questions.length; i++) {
+            const isAnswered = userAnswers[i] !== null;
+            const isCorrect = isAnswered && userAnswers[i] === questions[i].correct;
+            let statusClass = '';
+            let statusText = '';
+            if (!isAnswered) {
+                statusClass = 'summary-wrong';
+                statusText = 'Not answered';
+            } else if (isCorrect) {
+                statusClass = 'summary-correct';
+                statusText = 'Correct';
+            } else {
+                statusClass = 'summary-wrong';
+                statusText = 'Wrong';
+            }
+            summaryHtml += `
+                <div class="summary-item" onclick="goToQuestionAndClose(${i})">
+                    <strong>Question ${i+1}</strong>: <span class="${statusClass}">${statusText}</span>
+                </div>
+            `;
+        }
+        document.getElementById('summaryList').innerHTML = summaryHtml;
+        summaryModal.style.display = 'flex';
+        closeDrawer();
+    }
+    
+    function goToQuestionAndClose(qid) {
+        const targetPage = Math.floor(qid / QUESTIONS_PER_PAGE);
+        if (currentPage !== targetPage) {
+            currentPage = targetPage;
+            renderQuestions();
+        }
+        scrollToQuestion(qid);
+        summaryModal.style.display = 'none';
+        startTimer();
+        closeDrawer();
+    }
+
+    function showFinalScore() {
+        const score = calculateScore();
+        let wrongList = '';
+        for (let i = 0; i < questions.length; i++) {
+            if (userAnswers[i] === null || userAnswers[i] !== questions[i].correct) {
+                const status = userAnswers[i] === null ? 'Not answered' : 'Wrong';
+                const correctLetter = String.fromCharCode(97 + questions[i].correct);
+                wrongList += `<li>Q${i+1}: ${status} (Correct: ${correctLetter}. ${questions[i].options[questions[i].correct]})</li>`;
+            }
+        }
+        document.getElementById('scoreDetails').innerHTML = `
+            <p style="font-size: 1.5rem; text-align: center;"><strong>${score.correct}/${score.total}</strong> (${score.percentage}%)</p>
+            <hr>
+            <p><strong>Review:</strong></p>
+            <ul style="max-height: 300px; overflow-y: auto;">${wrongList || '<li>Perfect score! All correct!</li>'}</ul>
+            <p style="margin-top: 15px; font-size: 0.8rem; color: #6a737b;">This is a practice exam. Your answers are saved locally.</p>
+        `;
+        summaryModal.style.display = 'none';
+        scoreModal.style.display = 'flex';
+    }
+
+    finishAttemptLink.onclick = (e) => {
+        e.preventDefault();
+        showSummary();
+    };
+
+    document.getElementById('cancelSummaryBtn').onclick = () => {
+        summaryModal.style.display = 'none';
+        startTimer();
+    };
+
+    document.getElementById('submitFinalBtn').onclick = showFinalScore;
+    document.getElementById('closeScoreBtn').onclick = () => {
+        scoreModal.style.display = 'none';
+    };
+
+    function logout() {
+        localStorage.clear();
+        window.location.href = 'index.html';
+    }
+
+    logoutBtn.onclick = logout;
+
+    function checkLogin() {
+        const loggedIn = localStorage.getItem('hayyo_logged_in');
+        if (!loggedIn || loggedIn !== 'true') {
+            window.location.href = 'index.html';
+        }
+    }
+
+    function init() {
+        checkLogin();
+        loadFromLocalStorage();
+        renderQuestions();
+        updateTimerDisplay();
+        startTimer();
+    }
+
+    init();
+
+    window.addEventListener('beforeunload', function(e) {
+        const answered = userAnswers.filter(a => a !== null).length;
+        if (answered > 0 && answered < questions.length && timeSeconds > 0) {
+            e.preventDefault();
+            e.returnValue = 'You have unsaved answers. Are you sure you want to leave?';
+            return e.returnValue;
+        }
+    });
+</script>
+</body>
+</html>
