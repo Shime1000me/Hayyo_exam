@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Online ESSLCE-equivalent Exam Practice Portal - Select Round</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: #f0f2f5;
+            min-height: 100vh;
+        }
+
+        /* Navbar */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 1.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+            z-index: 1030;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .navbar-brand {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #0f6cbf;
+            text-decoration: none;
+        }
+
+        .navbar-brand span {
+            font-size: 0.8rem;
+            font-weight: normal;
+            color: #6a737b;
+        }
+
+        .logout-btn {
+            background: none;
+            border: 1px solid #dee2e6;
+            padding: 0.4rem 1rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            color: #6a737b;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+
+        .logout-btn:hover {
+            background: #ca3120;
+            color: white;
+            border-color: #ca3120;
+        }
+
+        /* Main Container */
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 80px 1.5rem 2rem;
+        }
+
+        /* Page Header */
+        .page-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .page-header h1 {
+            font-size: 2rem;
+            color: #1d2125;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-header p {
+            color: #6a737b;
+            font-size: 0.9rem;
+        }
+
+        /* Rounds Grid */
+        .rounds-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        /* Round Card */
+        .round-card {
+            background: white;
+            border-radius: 0.75rem;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid #dee2e6;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .round-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            border-color: #0f6cbf;
+        }
+
+        .round-card.active {
+            background: linear-gradient(135deg, #0f6cbf 0%, #094478 100%);
+            color: white;
+        }
+
+        .round-card.active .round-number,
+        .round-card.active .round-title,
+        .round-card.active .round-description,
+        .round-card.active .round-status {
+            color: white;
+        }
+
+        .round-card.locked {
+            opacity: 0.6;
+            cursor: not-allowed;
+            filter: grayscale(0.2);
+        }
+
+        .round-card.locked:hover {
+            transform: none;
+            box-shadow: none;
+            border-color: #dee2e6;
+        }
+
+        .round-number {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #0f6cbf;
+            margin-bottom: 0.5rem;
+        }
+
+        .round-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #1d2125;
+            margin-bottom: 0.5rem;
+        }
+
+        .round-description {
+            font-size: 0.85rem;
+            color: #6a737b;
+            margin-bottom: 1rem;
+            line-height: 1.4;
+        }
+
+        .round-status {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.7rem;
+            font-weight: 600;
+            background: #e9ecef;
+            color: #6a737b;
+        }
+
+        .round-card.active .round-status {
+            background: rgba(255,255,255,0.2);
+            color: white;
+        }
+
+        .lock-icon {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 1.2rem;
+            opacity: 0.5;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 1.5rem;
+            color: #6a737b;
+            font-size: 0.7rem;
+            border-top: 1px solid #dee2e6;
+            margin-top: 2rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .rounds-grid {
+                grid-template-columns: 1fr;
+            }
+            .navbar {
+                padding: 0 1rem;
+            }
+            .navbar-brand {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <a href="#" class="navbar-brand">
+        🏫 Online ESSLCE-equivalent<br><span>Exam Practice Portal</span>
+    </a>
+    <button class="logout-btn" onclick="logout()">🚪 Logout</button>
+</nav>
+
+<div class="main-container">
+    <div class="page-header">
+        <h1>Select Exam Round</h1>
+        <p>Choose a round to start your practice exam</p>
+    </div>
+
+    <div class="rounds-grid" id="roundsGrid">
+        <!-- Round 1 - Active -->
+        <div class="round-card active" data-round="1" onclick="selectRound(1)">
+            <div class="round-number">🏆 Round 1</div>
+            <div class="round-title">Full Model Exam</div>
+            <div class="round-description">
+                Complete exam with all subjects:<br>
+                Mathematics, Physics, Chemistry, English, Biology, SAT
+            </div>
+            <span class="round-status">✅ Available Now</span>
+        </div>
+
+        <!-- Round 2 - Locked -->
+        <div class="round-card locked" data-round="2">
+            <div class="lock-icon">🔒</div>
+            <div class="round-number">📚 Round 2</div>
+            <div class="round-title">Coming Soon</div>
+            <div class="round-description">
+                Second round model exam<br>
+                More practice questions
+            </div>
+            <span class="round-status">⏳ Coming Soon</span>
+        </div>
+
+        <!-- Round 3 - Locked -->
+        <div class="round-card locked" data-round="3">
+            <div class="lock-icon">🔒</div>
+            <div class="round-number">📚 Round 3</div>
+            <div class="round-title">Coming Soon</div>
+            <div class="round-description">
+                Third round model exam<br>
+                Advanced practice questions
+            </div>
+            <span class="round-status">⏳ Coming Soon</span>
+        </div>
+
+        <!-- Round 4 - Locked -->
+        <div class="round-card locked" data-round="4">
+            <div class="lock-icon">🔒</div>
+            <div class="round-number">📚 Round 4</div>
+            <div class="round-title">Coming Soon</div>
+            <div class="round-description">
+                Fourth round model exam<br>
+                Final preparation
+            </div>
+            <span class="round-status">⏳ Coming Soon</span>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <p>© 2026 Online ESSLCE-equivalent Exam Practice Portal</p>
+</footer>
+
+<script>
+    // ============================================
+    // ROUNDS PAGE - Select exam round
+    // ============================================
+
+    // Check if user is logged in
+    function checkLogin() {
+        const loggedIn = localStorage.getItem('hayyo_logged_in');
+        const loginTime = localStorage.getItem('hayyo_login_time');
+        
+        if (!loggedIn || loggedIn !== 'true') {
+            // Not logged in, redirect to login
+            window.location.href = 'index.html';
+            return false;
+        }
+        
+        if (loginTime) {
+            const timeSinceLogin = Date.now() - parseInt(loginTime);
+            const SESSION_DURATION = 8 * 60 * 60 * 1000; // 8 hours
+            
+            if (timeSinceLogin > SESSION_DURATION) {
+                // Session expired
+                localStorage.clear();
+                window.location.href = 'index.html';
+                return false;
+            }
+        }
+        
+        return true;
+    }
+
+    // Logout function
+    function logout() {
+        localStorage.clear();
+        window.location.href = 'index.html';
+    }
+
+    // Select round
+    function selectRound(round) {
+        if (round === 1) {
+            // Round 1 is available
+            window.location.href = 'exams1.html';
+        } else {
+            // Other rounds are locked
+            alert(`Round ${round} is coming soon! Stay tuned.`);
+        }
+    }
+
+    // Check login on page load
+    if (!checkLogin()) {
+        // Redirect will happen in checkLogin function
+    }
+</script>
+
+</body>
+</html>
